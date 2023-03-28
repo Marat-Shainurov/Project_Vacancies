@@ -3,6 +3,3 @@
 
 from src.classes import Engine, HH, SuperJob
 from src.connector import Connector
-
-obj_HH = HH()
-obj_HH.save_data_to_file()

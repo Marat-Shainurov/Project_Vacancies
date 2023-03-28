@@ -14,7 +14,7 @@ class Engine(ABC):
         pass
 
     @staticmethod
-    def get_connector(file_name):
+    def get_connector(file_name='response_data.json'):
         """ Возвращает экземпляр класса Connector """
         connector_object = Connector(file_name)
         return connector_object
@@ -22,20 +22,21 @@ class Engine(ABC):
 
 class HH(Engine):
     """Класс по работе с API HH."""
+    def __init__(self, key_text='Python', area=113):
+        self.key_text = key_text  # текст фильтра.
+        self.area = area  # Russia - код локации
 
-    def __init__(self):
-        self.key_text = 'Python'
-        self.area = 1
-
-
-    def get_request(self, page=0):
-        """Возвращает ответ на запрос к API HH."""
+    def get_request(self, page=0) -> json:
+        """
+        Возвращает ответ на запрос https://api.hh.ru/vacancies к API HH,
+        для выгрузки всех вакансий, в соответствии с указанными params и инициализированными key_text и area.
+        """
 
         params = {
-            'text': self.key_text,  # текст фильтра, в имени должно быть Python, доп данные через запятую.
-            'area': self.area,  # код локации (1 - Мск)
+            'text': self.key_text,  # текст фильтра.
+            'area': self.area,  # код локации
             'page': page,  # индекс страницы
-            'per_page': 100  # кол-во вакансий на 1 странице
+            'per_page': 100,  # кол-во вакансий на 1 странице
         }
 
         req = requests.get('https://api.hh.ru/vacancies', params)
@@ -44,14 +45,15 @@ class HH(Engine):
 
         return data
 
-    def save_data_to_file(self):
-        """Сохраняет первичный ответ на запрос к API HH в файл HH_data.json."""
-        data_to_store = []
-        for page in range(0, 10):
-            data = self.get_request(page)
-            data_to_store.append(data)
-        with open('HH_data.json', "w", encoding='utf8') as f:
-            json.dump(data_to_store, f, indent=2, ensure_ascii=False)
+    def data_to_insert(self):
+        """
+        Извлекает кол-во страниц ответа со всеми вакансиями.
+        Для каждой страницы вызывает Connect.insert() и дополняет файл в необходимом формате.
+        """
+        data = json.loads(self.get_request())
+        pages = data['pages']  # Узнать кол-во страниц в ответе get_request()
+        for page in range(pages):  # записать все страницы в документ, с помощью Connect.insert()
+            self.get_connector().insert(json.loads(self.get_request(page)))
 
 
 class SuperJob(Engine):

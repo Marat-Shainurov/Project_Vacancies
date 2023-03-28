@@ -1,3 +1,4 @@
+import json
 class Connector:
     """
     Класс коннектор к файлу, обязательно файл должен быть в json формате.
@@ -22,11 +23,27 @@ class Connector:
         """
         pass
 
-    def insert(self, data):
+    def insert(self, data_to_store):
         """
         Запись данных в файл с сохранением структуры и исходных данных
         """
-        pass
+
+        all_vacancies = data_to_store['items']
+
+        for element in range(len(all_vacancies)):
+            data_from_line = {}
+            data_from_line["id"] = all_vacancies[element]['id']
+            # # data_to_store[element].get('id', {}).get('id', None)
+            data_from_line['name'] = all_vacancies[element]['name']
+            data_from_line['salary'] = all_vacancies[element]['salary']
+            data_from_line['alternate_url'] = all_vacancies[element]['alternate_url']
+            data_from_line['employer'] = all_vacancies[element]['employer']
+            data_from_line['snippet'] = all_vacancies[element]['snippet']
+
+            with open(self.__data_file, "a", encoding='utf8') as f:
+                json.dump(data_from_line, f, ensure_ascii=False)
+                f.write(', ')
+                f.write('\n')
 
     def select(self, query):
         """

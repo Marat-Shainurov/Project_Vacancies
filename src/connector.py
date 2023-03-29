@@ -1,10 +1,27 @@
 import json
+import os
+
+
 class Connector:
     """
     Класс коннектор к файлу, обязательно файл должен быть в json формате.
     Не забывать проверять целостность данных, что файл с данными не подвергся внешней деградации.
     """
+
     def __init__(self, data_file):
+        """
+        Инициализирует экземпляр класса.
+        При инициализации, как и при присвоении нового значения data_file,
+        проходить проверка на существование и корректность файла.
+        """
+        path_to_file = f"../src/{data_file}"
+
+        if not os.path.exists(path_to_file):
+            f = open(path_to_file, 'w', encoding='utf8')
+            f.close()
+        if not os.path.isfile(path_to_file) or path_to_file[-5:] != '.json':
+            raise TypeError('Файл потерял актуальность в структуре данных!')
+
         self.__data_file = data_file
 
     @property
@@ -13,15 +30,24 @@ class Connector:
 
     @data_file.setter
     def data_file(self, value):
-        # тут должен быть код для установки файла
-        self.__connect()
+        """
+        Принимает новое значения для файла экземпляра.
+        """
+        self.__connect(value)
+        self.__data_file = value
 
-    def __connect(self):
+    def __connect(self, value):
         """
         Проверка на существование файла с данными и создание его при необходимости.
         Также проверить на деградацию и возбудить исключение если файл потерял актуальность в структуре данных.
         """
-        pass
+        path_to_file = f"../src/{value}"
+
+        if not os.path.exists(path_to_file):
+            f = open(value, 'w', encoding='utf8')
+            f.close()
+        if not os.path.isfile(path_to_file) or path_to_file[-5:] != '.json':
+            raise TypeError('Файл потерял актуальность в структуре данных!')
 
     def insert(self, data_to_store):
         """

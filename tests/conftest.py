@@ -13,3 +13,8 @@ def testing_instance_hh():
 def testing_instance_connector():
     obj = Connector('response_data.json')
     return obj
+
+@pytest.fixture
+def testing_instance_sj():
+    obj = SuperJob()
+    return obj

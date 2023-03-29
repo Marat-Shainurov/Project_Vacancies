@@ -8,6 +8,7 @@ from src.connector import Connector
 import requests
 import json
 
+
 class Engine(ABC):
     @abstractmethod
     def get_request(self):
@@ -22,8 +23,9 @@ class Engine(ABC):
 
 class HH(Engine):
     """Класс по работе с API HH."""
-    def __init__(self, key_text="", area=113):
-        self.key_text = 'NAME:Python ' + key_text  # текст фильтра.
+
+    def __init__(self, key_text='Python developer', area=113):
+        self.key_text = key_text  # текст фильтра.
         self.area = area  # Russia - код локации
 
     def get_request(self, page=0) -> json:
@@ -46,7 +48,7 @@ class HH(Engine):
 
         return data
 
-    def data_to_insert(self):
+    def pass_to_insert_hh(self):
         """
         Извлекает кол-во страниц ответа со всеми вакансиями.
         Для каждой страницы вызывает Connect.insert() и дополняет файл в необходимом формате.
@@ -59,30 +61,37 @@ class HH(Engine):
 
 class SuperJob(Engine):
 
-    def __init__(self, key_text=""):
+    def __init__(self):
         self.id = "v3.r.137452619.a63bcb7404a9e35b86138b7522ea580731285cad.4636fdc6cb7aa59a9a3960e3a42fd0d53b449a72"
-        self.key_text = 'Python ' + key_text
+        self.key_text = 'Python developer'
 
-    def get_request(self, page=0) -> json:
+    def get_request(self) -> json:
+        pages = 5  # максимально доступное кол-во на SJ, при максимальном уровне объектов на 1 стр (500 объектов).
+        data_final = {'objects': []}
 
         params = {
-            'keyword': self.key_text,
-            'page': page,
+            'keywords': self.key_text,
+            'page': 0,
             'count': 100,
             'experience': 1,
-            'id_country': 1
+            'id_country': 1,
+            'order_field': 'payment',
+            'order_direction': 'desc'
         }
         headers = {"X-Api-App-Id": self.id}
 
-        req = requests.get('https://api.superjob.ru/2.0/vacancies/', headers=headers, params=params)
-        data = req.content.decode()
-        req.close()
+        for i in range(0, pages):
+            params['page'] = i
+            req = requests.get('https://api.superjob.ru/2.0/vacancies/', headers=headers, params=params)
+            data = req.content.decode()
+            req.close()
+            python_data = json.loads(data)
+            data_final['objects'].extend(python_data['objects'])
 
-        return data
+        return data_final
 
-
-    def data_to_insert_sj(self):
+    def pass_to_insert_sj(self):
         """
-        Извлекает кол-во страниц ответа со всеми вакансиями.
-        Для каждой страницы вызывает Connect.insert() и дополняет файл в необходимом формате.
+        Отправляет итоговый максимально возможный по кол-ву ответ к обработке и записи в файл в Connector.insert()
         """
+        self.get_connector().insert_sj(self.get_request())

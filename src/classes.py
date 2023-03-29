@@ -22,8 +22,8 @@ class Engine(ABC):
 
 class HH(Engine):
     """Класс по работе с API HH."""
-    def __init__(self, key_text='Python', area=113):
-        self.key_text = key_text  # текст фильтра.
+    def __init__(self, key_text="", area=113):
+        self.key_text = 'NAME:Python ' + key_text  # текст фильтра.
         self.area = area  # Russia - код локации
 
     def get_request(self, page=0) -> json:
@@ -37,8 +37,9 @@ class HH(Engine):
             'area': self.area,  # код локации
             'page': page,  # индекс страницы
             'per_page': 100,  # кол-во вакансий на 1 странице
+            'experience': "noExperience",
         }
-
+        # between1And3,
         req = requests.get('https://api.hh.ru/vacancies', params)
         data = req.content.decode()
         req.close()
@@ -53,9 +54,35 @@ class HH(Engine):
         data = json.loads(self.get_request())
         pages = data['pages']  # Узнать кол-во страниц в ответе get_request()
         for page in range(pages):  # записать все страницы в документ, с помощью Connect.insert()
-            self.get_connector().insert(json.loads(self.get_request(page)))
+            self.get_connector().insert_hh(json.loads(self.get_request(page)))
 
 
 class SuperJob(Engine):
-    def get_request(self):
-        pass
+
+    def __init__(self, key_text=""):
+        self.id = "v3.r.137452619.a63bcb7404a9e35b86138b7522ea580731285cad.4636fdc6cb7aa59a9a3960e3a42fd0d53b449a72"
+        self.key_text = 'Python ' + key_text
+
+    def get_request(self, page=0) -> json:
+
+        params = {
+            'keyword': self.key_text,
+            'page': page,
+            'count': 100,
+            'experience': 1,
+            'id_country': 1
+        }
+        headers = {"X-Api-App-Id": self.id}
+
+        req = requests.get('https://api.superjob.ru/2.0/vacancies/', headers=headers, params=params)
+        data = req.content.decode()
+        req.close()
+
+        return data
+
+
+    def data_to_insert_sj(self):
+        """
+        Извлекает кол-во страниц ответа со всеми вакансиями.
+        Для каждой страницы вызывает Connect.insert() и дополняет файл в необходимом формате.
+        """

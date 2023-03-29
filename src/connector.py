@@ -49,15 +49,17 @@ class Connector:
         if not os.path.isfile(path_to_file) or path_to_file[-5:] != '.json':
             raise TypeError('Файл потерял актуальность в структуре данных!')
 
-    def insert(self, data_to_store):
+    def insert_hh(self, data_to_store):
         """
-        Запись данных в файл с сохранением структуры и исходных данных
+        Запись данных в файл с сохранением структуры и исходных данных.
+        Источник - HH.ru
         """
 
         all_vacancies = data_to_store['items']
 
         for element in range(len(all_vacancies)):
             data_from_line = {}
+            data_from_line['source'] = 'HH'
             data_from_line["id"] = all_vacancies[element]['id']
             # # data_to_store[element].get('id', {}).get('id', None)
             data_from_line['name'] = all_vacancies[element]['name']
@@ -70,6 +72,12 @@ class Connector:
                 json.dump(data_from_line, f, ensure_ascii=False)
                 f.write(', ')
                 f.write('\n')
+
+    def insert_sj(self, data_to_store):
+        """
+        Запись данных в файл с сохранением структуры и исходных данных.
+        Источник - SuperJob.ru
+        """
 
     def select(self, query):
         """

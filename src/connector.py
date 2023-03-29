@@ -61,7 +61,6 @@ class Connector:
             data_from_line = {}
             data_from_line['source'] = 'HH'
             data_from_line["id"] = all_vacancies[element]['id']
-            # # data_to_store[element].get('id', {}).get('id', None)
             data_from_line['name'] = all_vacancies[element]['name']
             data_from_line['salary'] = all_vacancies[element]['salary']
             data_from_line['alternate_url'] = all_vacancies[element]['alternate_url']
@@ -78,6 +77,25 @@ class Connector:
         Запись данных в файл с сохранением структуры и исходных данных.
         Источник - SuperJob.ru
         """
+
+        all_vacancies = data_to_store['objects']
+
+        for element in range(len(all_vacancies)):
+            data_from_line = {}
+            data_from_line['source'] = 'SJ'
+            data_from_line["id"] = all_vacancies[element]['id']
+            data_from_line['name'] = all_vacancies[element]['profession']
+            data_from_line['salary'] = {'from': all_vacancies[element]['payment_from'],
+                                        'to': all_vacancies[element]['payment_to'],
+                                        'currency': all_vacancies[element]['currency']}
+            data_from_line['alternate_url'] = all_vacancies[element]['link']
+            data_from_line['employer'] = all_vacancies[element]['firm_name']
+            data_from_line['snippet'] = all_vacancies[element]['work']
+
+            with open(self.__data_file, "a", encoding='utf8') as f:
+                json.dump(data_from_line, f, ensure_ascii=False)
+                f.write(', ')
+                f.write('\n')
 
     def select(self, query):
         """

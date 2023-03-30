@@ -1,12 +1,9 @@
-# 1. Опишите логику записи найденных вакансий в один json файл.
-# 2. Опишите логику вывода информации по данным пользователя.
-# Пользователь может вывести 10 самых высокооплачиваемых вакансий из файла с результатами или вакансии,
-# в которых не требуется опыт работы.
-
-from abc import ABC, abstractmethod
-from src.connector import Connector
-import requests
 import json
+from abc import ABC, abstractmethod
+
+import requests
+
+from src.connector import Connector
 
 
 class Engine(ABC):
@@ -24,10 +21,10 @@ class Engine(ABC):
 class HH(Engine):
     """Класс по работе с API HH."""
 
-    def __init__(self, key_text="Python junior", area=113, experience="noExperience"):
+    def __init__(self, key_text="Python", area=113, experience="noExperience"):
         self.key_text = key_text  # текст фильтра.
         self.area = area  # Russia - код локации
-        self.experience = experience
+        self.experience = experience  # код фильтрации опыта работы
 
     def get_request(self, page=0) -> json:
         """
@@ -36,8 +33,8 @@ class HH(Engine):
         """
 
         params = {
-            'text': self.key_text,  # текст фильтра.
-            'area': self.area,  # код локации
+            'text': self.key_text,
+            'area': self.area,
             'page': page,  # индекс страницы
             'per_page': 100,  # кол-во вакансий на 1 странице
             'experience': self.experience,
@@ -63,11 +60,11 @@ class HH(Engine):
 
 class SuperJob(Engine):
 
-    def __init__(self, key_text='Python junior', area=1, experience=1):
+    def __init__(self, key_text='Python', area=1, experience=1):
         self.id = "v3.r.137452619.a63bcb7404a9e35b86138b7522ea580731285cad.4636fdc6cb7aa59a9a3960e3a42fd0d53b449a72"
-        self.key_text = key_text
-        self.area = area
-        self.experience = experience
+        self.key_text = key_text  # текст фильтра.
+        self.area = area  # Russia - код локации
+        self.experience = experience  # код фильтрации опыта работы
 
     def get_request(self) -> json:
         pages = 5  # максимально доступное кол-во на SJ, при максимальном уровне объектов на 1 стр (500 объектов).

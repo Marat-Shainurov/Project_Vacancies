@@ -53,11 +53,15 @@ def sorting(vacancies):
 
 
 def get_top(vacancies, top_count):
-    """ Должен возвращать {top_count} записей из вакансий по зарплате (iter, next magic methods) """
+    """
+    Возвращает {top_count} записей из вакансий по зарплате.
+    """
+
     sorted_array = sorting(vacancies)
     res = []
-    iterator = iter(sorted_array)
     count = 0
+
+    iterator = iter(sorted_array)
     while count < top_count:
         try:
             item = next(iterator)

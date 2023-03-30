@@ -5,7 +5,7 @@ from src.connector import Connector
 
 @pytest.fixture
 def testing_instance_hh():
-    obj = HH()
+    obj = HH(key_text="Python", area=113, experience="noExperience")
     return obj
 
 
@@ -14,7 +14,8 @@ def testing_instance_connector():
     obj = Connector('response_data.json')
     return obj
 
+
 @pytest.fixture
 def testing_instance_sj():
-    obj = SuperJob()
+    obj = SuperJob(key_text='Python', area=1, experience=1)
     return obj

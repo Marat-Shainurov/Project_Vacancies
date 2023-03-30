@@ -63,9 +63,10 @@ class HH(Engine):
 
 class SuperJob(Engine):
 
-    def __init__(self, key_text='Python junior', experience=1):
+    def __init__(self, key_text='Python junior', area=1, experience=1):
         self.id = "v3.r.137452619.a63bcb7404a9e35b86138b7522ea580731285cad.4636fdc6cb7aa59a9a3960e3a42fd0d53b449a72"
         self.key_text = key_text
+        self.area = area
         self.experience = experience
 
     def get_request(self) -> json:
@@ -77,7 +78,7 @@ class SuperJob(Engine):
             'page': 0,
             'count': 100,
             'experience': self.experience,
-            'id_country': 1,
+            'id_country': self.area,
             'order_field': 'payment',
             'order_direction': 'desc'
         }

@@ -1,4 +1,5 @@
 class Vacancy:
+
     __slots__ = ("vacancy_name", "vacancy_url", "vacancy_description", "vacancy_salary")
 
     def __init__(self):
@@ -7,6 +8,12 @@ class Vacancy:
         self.vacancy_url = None
         self.vacancy_description = None
         self.vacancy_salary = None
+
+    def __gt__(self, other):
+        pass
+
+    def __lt__(self, other):
+        pass
 
     def __str__(self):
         pass

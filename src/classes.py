@@ -24,9 +24,10 @@ class Engine(ABC):
 class HH(Engine):
     """Класс по работе с API HH."""
 
-    def __init__(self, key_text='Python developer', area=113):
+    def __init__(self, key_text='Python разработчик developer', area=113, experience="noExperience"):
         self.key_text = key_text  # текст фильтра.
         self.area = area  # Russia - код локации
+        self.experience = experience
 
     def get_request(self, page=0) -> json:
         """
@@ -39,9 +40,10 @@ class HH(Engine):
             'area': self.area,  # код локации
             'page': page,  # индекс страницы
             'per_page': 100,  # кол-во вакансий на 1 странице
-            'experience': "noExperience",
+            'experience': self.experience,
+            'vacancy_search_order': 'salary_desc'
         }
-        # between1And3,
+
         req = requests.get('https://api.hh.ru/vacancies', params)
         data = req.content.decode()
         req.close()
@@ -61,9 +63,10 @@ class HH(Engine):
 
 class SuperJob(Engine):
 
-    def __init__(self):
+    def __init__(self, key_text='Python разработчик developer', experience=1):
         self.id = "v3.r.137452619.a63bcb7404a9e35b86138b7522ea580731285cad.4636fdc6cb7aa59a9a3960e3a42fd0d53b449a72"
-        self.key_text = 'Python developer'
+        self.key_text = key_text
+        self.experience = experience
 
     def get_request(self) -> json:
         pages = 5  # максимально доступное кол-во на SJ, при максимальном уровне объектов на 1 стр (500 объектов).
@@ -73,7 +76,7 @@ class SuperJob(Engine):
             'keywords': self.key_text,
             'page': 0,
             'count': 100,
-            'experience': 1,
+            'experience': self.experience,
             'id_country': 1,
             'order_field': 'payment',
             'order_direction': 'desc'

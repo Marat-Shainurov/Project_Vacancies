@@ -66,7 +66,7 @@ class Connector:
             data_from_line['name'] = all_vacancies[element]['name']
             data_from_line['salary'] = all_vacancies[element]['salary']
             data_from_line['alternate_url'] = all_vacancies[element]['alternate_url']
-            data_from_line['employer'] = all_vacancies[element]['employer']
+            data_from_line['employer'] = all_vacancies[element]['employer']['name']
             data_from_line['snippet'] = all_vacancies[element]['snippet']
 
             with open(self.__data_file, "a", encoding='utf8') as f:

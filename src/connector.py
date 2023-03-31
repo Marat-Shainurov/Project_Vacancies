@@ -14,13 +14,13 @@ class Connector:
         При инициализации, как и при присвоении нового значения data_file,
         проходить проверка на существование и корректность файла.
         """
-        path_to_file = f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{data_file}"
+        self.path_to_file = f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{data_file}"
 
-        if not os.path.exists(path_to_file):
-            f = open(path_to_file, 'w', encoding='utf8')
+        if not os.path.exists(self.path_to_file):
+            f = open(self.path_to_file, 'w', encoding='utf8')
             f.close()
         else:
-            if not os.path.isfile(path_to_file) or path_to_file[-5:] != '.json':
+            if not os.path.isfile(self.path_to_file) or self.path_to_file[-5:] != '.json':
                 raise TypeError('Файл потерял актуальность в структуре данных!')
 
         self.__data_file = data_file
@@ -42,13 +42,13 @@ class Connector:
         Проверка на существование файла с данными и создание его при необходимости.
         Также проверить на деградацию и возбудить исключение если файл потерял актуальность в структуре данных.
         """
-        path_to_file = f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{value}"
+        self.path_to_file = f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{value}"
 
-        if not os.path.exists(path_to_file):
-            f = open(path_to_file, 'w', encoding='utf8')
+        if not os.path.exists(self.path_to_file):
+            f = open(self.path_to_file, 'w', encoding='utf8')
             f.close()
         else:
-            if not os.path.isfile(path_to_file) or path_to_file[-5:] != '.json':
+            if not os.path.isfile(self.path_to_file) or self.path_to_file[-5:] != '.json':
                 raise TypeError('Файл потерял актуальность в структуре данных!')
 
     def insert_hh(self, data_to_store):
@@ -118,18 +118,43 @@ class Connector:
         query_key = list(query.keys())[0]
 
         for element in data:
-            if not element[query_key]:
-                return
-            if element[query_key] == query[query_key]:
-                res.append(element)
+            try:
+                if element[query_key] == query[query_key]:
+                    res.append(element)
+            except KeyError:
+                pass
 
-        return res
+        if not res:
+            return None
+        else:
+            return res
 
 
     def delete(self, query):
         """
-        Удаление записей из файла, которые соответствуют запрос,
+        Удаление записей из файла, которые соответствуют запросу,
         как в методе select. Если в query передан пустой словарь, то
         функция удаления не сработает
         """
-        pass
+        res = []
+        with open(self.path_to_file, encoding='utf8') as f:
+            content = f.read()
+            content_new = f"[{content.strip().strip(',')}]"
+        data = json.loads(content_new)
+        query_key = list(query.keys())[0]
+
+        for element in data:
+            try:
+                if element[query_key] != query[query_key]:
+                    res.append(element)
+            except KeyError:
+                res.append(element)
+
+        if len(res) != len(data):
+            with open(self.path_to_file, "w") as f:
+                f.write('')
+            for el in res:
+                with open(self.path_to_file, "a", encoding='utf8') as f:
+                    json.dump(el, f, ensure_ascii=False)
+                    f.write(', ')
+                    f.write('\n')

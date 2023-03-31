@@ -7,13 +7,19 @@ from src.connector import Connector
 
 
 class Engine(ABC):
+    """
+    Базовый абстрактный класс для классов HH и SuperJob.
+    """
     @abstractmethod
     def get_request(self):
+        """
+        Метод к обязательному переопределению в наследуемых классах.
+        """
         pass
 
     @staticmethod
     def get_connector(file_name='response_data.json'):
-        """ Возвращает экземпляр класса Connector """
+        """Статичный метод, возвращающий экземпляр класса Connector """
         connector_object = Connector(file_name)
         return connector_object
 
@@ -22,6 +28,12 @@ class HH(Engine):
     """Класс по работе с API HH."""
 
     def __init__(self, key_text="Python", area=113, experience="noExperience"):
+        """
+        Инициализатор класса.
+        :param key_text: основной текст поиска вакансий на сайте.
+        :param area: страна = по умолчанию Россиия.
+        :param experience: ожидаемый опыт кандидата, по умолчанию передается "без опыта".
+        """
         self.key_text = key_text  # текст фильтра.
         self.area = area  # Russia - код локации
         self.experience = experience  # код фильтрации опыта работы
@@ -35,10 +47,10 @@ class HH(Engine):
         params = {
             'text': self.key_text,
             'area': self.area,
-            'page': page,  # индекс страницы
-            'per_page': 100,  # кол-во вакансий на 1 странице
+            'page': page,  # индекс страницы, для дальнейшей итерации по страницам
+            'per_page': 100,  # max кол-во вакансий на 1 странице
             'experience': self.experience,
-            'vacancy_search_order': "salary_desc",
+            'vacancy_search_order': "salary_desc",  # встроенная сортировка по убыванию ответа по ЗП
         }
 
         req = requests.get('https://api.hh.ru/vacancies', params)
@@ -50,7 +62,7 @@ class HH(Engine):
     def pass_to_insert_hh(self):
         """
         Извлекает кол-во страниц ответа со всеми вакансиями.
-        Для каждой страницы вызывает Connect.insert() и дополняет файл в необходимом формате.
+        Для каждой страницы вызывает Connect.insert_hh() и дополняет файл в необходимом формате.
         """
         data = json.loads(self.get_request())
         pages = data['pages']  # Узнать кол-во страниц в ответе get_request()
@@ -59,8 +71,14 @@ class HH(Engine):
 
 
 class SuperJob(Engine):
-
+    """Класс по работе с API SuperJob."""
     def __init__(self, key_text='Python', area=1, experience=1):
+        """
+        Инициализатор класса.
+        :param key_text: основной текст поиска вакансий на сайте.
+        :param area: страна = по умолчанию Россиия.
+        :param experience: ожидаемый опыт кандидата, по умолчанию передается "без опыта".
+        """
         self.id = "v3.r.137452619.a63bcb7404a9e35b86138b7522ea580731285cad.4636fdc6cb7aa59a9a3960e3a42fd0d53b449a72"
         self.key_text = key_text  # текст фильтра.
         self.area = area  # Russia - код локации
@@ -72,11 +90,11 @@ class SuperJob(Engine):
 
         params = {
             'keywords': self.key_text,
-            'page': 0,
-            'count': 100,
+            'page': 0,  # индекс страницы, для дальнейшей итерации по страницам
+            'count': 100,  # max кол-во вакансий на 1 странице
             'experience': self.experience,
             'id_country': self.area,
-            'order_field': 'payment',
+            'order_field': 'payment',  # встроенная сортировка по убыванию ответа по ЗП
             'order_direction': 'desc'
         }
         headers = {"X-Api-App-Id": self.id}
@@ -93,6 +111,6 @@ class SuperJob(Engine):
 
     def pass_to_insert_sj(self):
         """
-        Отправляет итоговый максимально возможный по кол-ву ответ к обработке и записи в файл в Connector.insert()
+        Отправляет итоговый максимально возможный по кол-ву ответ к обработке и записи в файл в Connector.insert_sj()
         """
         self.get_connector().insert_sj(self.get_request())

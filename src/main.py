@@ -1,10 +1,10 @@
 from src.classes import HH, SuperJob
-from src.jobs_classes import HHVacancy, SJVacancy, CountMixin
-from src.utils import get_top, sorting
+from src.jobs_classes import CountMixin
+from src.utils import get_top, write_to_file_final
 
 # Создание объектов классов HH SuperJob.
-# По умолчанию поиск вакансий производится в России, по запросу "Python разработчик developer", без опыта работы.
-# При необходимости можно передать экземпляру значения атрибутам "key_text", "area", "experience". Детали в README.
+# По умолчанию поиск вакансий производится в России, по запросу "Python", без опыта работы.
+# При необходимости можно передать экземпляру значения атрибутам "key_text", "area", "experience" - детали в README.
 object_HH = HH()
 object_SJ = SuperJob()
 
@@ -18,13 +18,7 @@ top_to_apply = get_top('response_data.json', top_count)
 
 # Создаются экземпляры классов Vacancy.
 # Вызываются необходимые методы классов Vacancy для записи в файл потенциальных вакансий для отклика.
-for vacancy in top_to_apply:
-    if vacancy['source'] == "HH":
-        obj_hh = HHVacancy(vacancy)
-        obj_hh.write_to_file()
-    else:
-        obj_sj = SJVacancy(vacancy)
-        obj_sj.write_to_file()
+write_to_file_final(top_to_apply, f'../src/vacancies_to_apply.txt')
 
 print(CountMixin.get_count_of_vacancy)
 print("Вакансии для потенциальных откликов записаны в файл 'best_vacancies.json'. Удачи на интервью!")

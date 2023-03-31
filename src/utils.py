@@ -1,9 +1,9 @@
 import json
-import requests
-import time
+
+from src.jobs_classes import HHVacancy, SJVacancy
+
 
 def sorting(vacancies):
-
     """
     Сортирует список вакансий по ЗП. Анализируется значение коллекции 'salary' в каждой вакансии,
     и внутри вакансии создается новый элемент с ключом 'salary_to_be_sorted_by',
@@ -72,3 +72,17 @@ def get_top(vacancies, top_count):
 
     return res
 
+
+def write_to_file_final(top_to_apply, path_to_file):
+    """
+    Получает итоговый список из топ вакансий, готовых к записи в vacancies_to_apply.
+    Создает экземпляры классов Vacancy и вызывает методы write_to_file.
+    """
+
+    for vacancy in top_to_apply:
+        if vacancy['source'] == "HH":
+            obj_hh = HHVacancy(vacancy)
+            obj_hh.write_to_file(path_to_file)
+        else:
+            obj_sj = SJVacancy(vacancy)
+            obj_sj.write_to_file(path_to_file)

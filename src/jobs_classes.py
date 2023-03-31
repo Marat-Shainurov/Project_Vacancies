@@ -34,8 +34,8 @@ class Vacancy:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.vacancy})"
 
-    def write_to_file(self):
-        with open('vacancies_to_apply.txt', "a", encoding='utf8') as f:
+    def write_to_file(self, path_to_file):
+        with open(path_to_file, "a", encoding='utf8') as f:
             f.write("\n")
             f.write("Вакансия: ")
             f.write("\n")

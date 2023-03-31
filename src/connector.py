@@ -110,7 +110,7 @@ class Connector:
 
         res = []
 
-        with open(self.__data_file, encoding='utf8') as f:
+        with open(self.path_to_file, encoding='utf8') as f:
             content = f.read()
             content_new = f"[{content.strip().strip(',')}]"
 

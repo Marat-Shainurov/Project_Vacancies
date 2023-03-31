@@ -24,7 +24,7 @@ def testing_instance_sj():
 
 @pytest.fixture
 def testing_instance_connector_example():
-    obj = Connector('../tests/test_response_data.json')
+    obj = Connector('../src/test_response_data.json')
     return obj
 
 

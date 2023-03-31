@@ -9,6 +9,7 @@ def test_init_connector(testing_instance_connector):
     """
     assert testing_instance_connector.data_file == 'response_data.json'
 
+
 def test_init_connector_no_file():
     """
     Тестирует создание нового экземпляра класса, и присвоение значения атрибуту data_file несуществующего на момент
@@ -26,9 +27,11 @@ def test_init_connector_no_file():
     os.remove(obj.path_to_file)
     os.remove(f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{file_name}")
 
+
 def test_select(testing_instance_connector_example):
     assert testing_instance_connector_example.select({'source': 'HH'})[0]['name'] == "ML-специалист (Junior)"
     assert testing_instance_connector_example.select({'invalid_key': 1}) is None
+
 
 def test_delete():
     """
@@ -41,7 +44,7 @@ def test_delete():
 
     obj = Connector('testing.json')
     with open(obj.path_to_file, 'w', encoding='utf8') as f:
-        with open('../tests/test_response_data.json', encoding='utf8') as file:
+        with open("C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\test_response_data.json", encoding='utf8') as file:
             content = file.read()
         f.write(content)
     obj.delete({'source': 'HH'})

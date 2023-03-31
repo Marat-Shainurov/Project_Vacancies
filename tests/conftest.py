@@ -21,10 +21,12 @@ def testing_instance_sj():
     obj = SuperJob(key_text='Python', area=1, experience=1)
     return obj
 
+
 @pytest.fixture
 def testing_instance_connector_example():
     obj = Connector('../tests/test_response_data.json')
     return obj
+
 
 @pytest.fixture
 def testing_instance_Vacancy():

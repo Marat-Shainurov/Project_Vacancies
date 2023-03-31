@@ -37,14 +37,23 @@ def test_sj_get_request(testing_instance_sj):
     assert len(testing_instance_sj.get_request()['objects']) == 500
 
 def test_Vacancy_init(testing_instance_Vacancy):
+    """
+     Тестирует инициализацию класса Vacancy.
+    """
     assert testing_instance_Vacancy.source == "HH"
     assert testing_instance_Vacancy.vacancy_name == 'Специалист службы поддержки с техническими знаниями (TOOLS)'
 
 def test_HHVacancy_init(testing_instance_HHVacancy):
+    """
+    Тестирует инициализацию класса HHVacancy.
+    """
     assert testing_instance_HHVacancy.source == "HH"
     assert testing_instance_HHVacancy.vacancy_name == 'Специалист службы поддержки с техническими знаниями (TOOLS)'
 
 def test_SJVacancy_init(testing_instance_SJVacancy):
+    """
+    Тестирует инициализацию класса SJVacancy.
+    """
     assert testing_instance_SJVacancy.source == "SJ"
     assert testing_instance_SJVacancy.vacancy_name == 'Специалист службы поддержки с техническими знаниями'
 

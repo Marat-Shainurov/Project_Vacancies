@@ -18,12 +18,12 @@ def test_init_connector_no_file():
     file_name = 'non_existing_file.json'
     assert os.path.exists(f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{file_name}") is False
     obj = Connector(file_name)
-    assert os.path.exists(f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{file_name}") is True
+    assert os.path.exists(obj.path_to_file) is True
     assert obj.data_file == file_name
     obj.data_file = 'new.json'
-    assert os.path.exists(f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{'new.json'}") is True
+    assert os.path.exists(obj.path_to_file) is True
     assert obj.data_file == 'new.json'
-    os.remove(f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{'new.json'}")
+    os.remove(obj.path_to_file)
     os.remove(f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{file_name}")
 
 def test_select(testing_instance_connector_example):
@@ -31,6 +31,13 @@ def test_select(testing_instance_connector_example):
     assert testing_instance_connector_example.select({'invalid_key': 1}) is None
 
 def test_delete():
+    """
+    Тестирует удаление элемента из файла.
+    Для этого создается временный тестовый объект класса с тестовым временным файлом.
+    Во временный файл записывается инфо из test_response_data.json.
+    Далее из временного файла удаляется с помощью метода test_delete(),
+    и проверяется наличие изменение данных (изменение длины списка и данные в первом элементе).
+    """
 
     obj = Connector('testing.json')
     with open(obj.path_to_file, 'w', encoding='utf8') as f:
@@ -46,5 +53,4 @@ def test_delete():
 
     assert data[0]['name'] == "Специалист службы поддержки (с техническими знаниями)"
     assert len(data) == 2
-
     os.remove(obj.path_to_file)

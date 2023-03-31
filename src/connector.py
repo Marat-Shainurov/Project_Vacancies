@@ -53,8 +53,8 @@ class Connector:
 
     def insert_hh(self, data_to_store):
         """
-        Запись данных в файл с сохранением структуры и исходных данных.
-        Источник - HH.ru
+        Запись данных в файл в едином формате с сохранением структуры и исходных данных.
+        Источник - ответ запроса к API HH.
         """
 
         all_vacancies = data_to_store['items']
@@ -76,8 +76,8 @@ class Connector:
 
     def insert_sj(self, data_to_store):
         """
-        Запись данных в файл с сохранением структуры и исходных данных.
-        Источник - SuperJob.ru
+        Запись данных в файл в едином формате с сохранением структуры и исходных данных.
+        Источник - ответ запроса к API SuperJob.ru.
         """
 
         all_vacancies = data_to_store['objects']
@@ -136,6 +136,7 @@ class Connector:
         как в методе select. Если в query передан пустой словарь, то
         функция удаления не сработает
         """
+
         res = []
         with open(self.path_to_file, encoding='utf8') as f:
             content = f.read()

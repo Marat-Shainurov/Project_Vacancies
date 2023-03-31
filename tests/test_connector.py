@@ -15,10 +15,13 @@ def test_init_connector_no_file():
     Ожидания - создаются новые файлы и экземпляры класса Connector с новым значением data_file.
     """
     file_name = 'non_existing_file.json'
-    assert os.path.exists(f"../src/{file_name}") is False
+    assert os.path.exists(f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{file_name}") is False
     obj = Connector(file_name)
-    assert os.path.exists(f"../src/{file_name}") is True
+    assert os.path.exists(f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{file_name}") is True
     assert obj.data_file == file_name
     obj.data_file = 'new.json'
-    assert os.path.exists(f"../src/new.json") is True
+    assert os.path.exists(f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{'new.json'}") is True
     assert obj.data_file == 'new.json'
+
+def test_select(testing_instance_connector_example):
+    assert testing_instance_connector_example.select({'source': 'HH'})[0]['name'] == "Стажер-программист Python"

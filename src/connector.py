@@ -14,13 +14,14 @@ class Connector:
         При инициализации, как и при присвоении нового значения data_file,
         проходить проверка на существование и корректность файла.
         """
-        path_to_file = f"../src/{data_file}"
+        path_to_file = f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{data_file}"
 
         if not os.path.exists(path_to_file):
             f = open(path_to_file, 'w', encoding='utf8')
             f.close()
-        if not os.path.isfile(path_to_file) or path_to_file[-5:] != '.json':
-            raise TypeError('Файл потерял актуальность в структуре данных!')
+        else:
+            if not os.path.isfile(path_to_file) or path_to_file[-5:] != '.json':
+                raise TypeError('Файл потерял актуальность в структуре данных!')
 
         self.__data_file = data_file
 
@@ -41,13 +42,14 @@ class Connector:
         Проверка на существование файла с данными и создание его при необходимости.
         Также проверить на деградацию и возбудить исключение если файл потерял актуальность в структуре данных.
         """
-        path_to_file = f"../src/{value}"
+        path_to_file = f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{value}"
 
         if not os.path.exists(path_to_file):
-            f = open(value, 'w', encoding='utf8')
+            f = open(path_to_file, 'w', encoding='utf8')
             f.close()
-        if not os.path.isfile(path_to_file) or path_to_file[-5:] != '.json':
-            raise TypeError('Файл потерял актуальность в структуре данных!')
+        else:
+            if not os.path.isfile(path_to_file) or path_to_file[-5:] != '.json':
+                raise TypeError('Файл потерял актуальность в структуре данных!')
 
     def insert_hh(self, data_to_store):
         """
@@ -97,7 +99,7 @@ class Connector:
                 f.write(', ')
                 f.write('\n')
 
-    def select(self, query):
+    def select(self, query: dict):
         """
         Выбор данных из файла с применением фильтрации
         query содержит словарь, в котором ключ это поле для
@@ -105,7 +107,24 @@ class Connector:
         {'price': 1000}, должно отфильтровать данные по полю price
         и вернуть все строки, в которых цена 1000
         """
-        pass
+
+        res = []
+
+        with open(self.__data_file, encoding='utf8') as f:
+            content = f.read()
+            content_new = f"[{content.strip().strip(',')}]"
+
+        data = json.loads(content_new)
+        query_key = list(query.keys())[0]
+
+        for element in data:
+            if not element[query_key]:
+                return
+            if element[query_key] == query[query_key]:
+                res.append(element)
+
+        return res
+
 
     def delete(self, query):
         """
@@ -114,17 +133,3 @@ class Connector:
         функция удаления не сработает
         """
         pass
-
-
-if __name__ == '__main__':
-    df = Connector('df.json')
-
-    data_for_file = {'id': 1, 'title': 'tet'}
-
-    df.insert(data_for_file)
-    data_from_file = df.select(dict())
-    assert data_from_file == [data_for_file]
-
-    df.delete({'id': 1})
-    data_from_file = df.select(dict())
-    assert data_from_file == []

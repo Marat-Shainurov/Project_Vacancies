@@ -12,8 +12,8 @@ class Vacancy:
         self.vacancy_name = self.vacancy['name']
         self.vacancy_url = self.vacancy['alternate_url']
         self.vacancy_description = self.vacancy['snippet']
-        self.vacancy_salary = self.vacancy['salary']
-        self.employer = self.vacancy['employer']
+        self.vacancy_salary = self.vacancy['salary_to_be_sorted_by']
+        self.employer = self.vacancy['employer']['name']
         self.source = self.vacancy['source']
 
     def __gt__(self, other) -> bool:
@@ -29,7 +29,7 @@ class Vacancy:
         return self.vacancy['salary'] < other.vacancy['salary']
 
     def __str__(self):
-        return f'{self.source}: {self.employer}, зарплата: {self.vacancy_salary} руб/мес, компания: {self.employer}, ссылка: {self.vacancy_url}'
+        return f'{self.vacancy_name}, зарплата: {self.vacancy_salary} руб/мес, Компания: {self.employer}, ссылка: {self.vacancy_url}'
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.vacancy})"
@@ -38,7 +38,6 @@ class Vacancy:
         with open(path_to_file, "a", encoding='utf8') as f:
             f.write("\n")
             f.write("Вакансия: ")
-            f.write("\n")
             f.write(self.__str__())
 
 

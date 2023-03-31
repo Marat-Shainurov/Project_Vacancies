@@ -20,13 +20,13 @@ class Vacancy:
         """
         Сравнивает 2 вакансии классов Vacancy, HHVacancy, SJVacancy по ЗП. Возвращает bool.
         """
-        return self.vacancy['salary'] > other.vacancy['salary']
+        return self.vacancy_salary > other.vacancy_salary
 
     def __lt__(self, other) -> bool:
         """
         Сравнивает 2 вакансии классов Vacancy, HHVacancy, SJVacancy по ЗП. Возвращает bool.
         """
-        return self.vacancy['salary'] < other.vacancy['salary']
+        return self.vacancy_salary < other.vacancy_salary
 
     def __str__(self):
         return f'{self.source}, {self.vacancy_name}, зарплата: {self.vacancy_salary} руб/мес, ' \
@@ -75,3 +75,19 @@ class HHVacancy(Vacancy, CountMixin):
 class SJVacancy(Vacancy, CountMixin):
     """ SuperJob Vacancy """
     pass
+
+object_1 = HHVacancy({
+        'source': 'HH', 'id': '73595241', 'name': 'Специалист службы поддержки с техническими знаниями (TOOLS)',
+        'salary': {'from': 15000, 'to': 39000, 'currency': 'RUR', 'gross': False},
+        'alternate_url': 'https://hh.ru/vacancy/73595241',
+        'employer': {'id': '9498112', 'name': 'Яндекс Крауд', 'url': 'https://api.hh.ru/employers/9498112',
+                     'alternate_url': 'https://hh.ru/employer/9498112', 'logo_urls': None,
+                     'vacancies_url': 'https://api.hh.ru/vacancies?employer_id=9498112', 'trusted': True},
+        'snippet': {
+            'requirement': 'Умеете читать языки JavaScript, HTML и <highlighttext>Python</highlighttext>. Имеете высшее или неоконченное высшее образование (техническое будет плюсом). Помогали людям онлайн. ',
+            'responsibility': 'Отвечать на сообщения пользователей по почте и в чатах. Консультировать их о вопросах, связанных с Яндексом. Передавать информацию разработчикам и...'},
+        'salary_to_be_sorted_by': 15000
+    })
+
+
+print(str(object_1))

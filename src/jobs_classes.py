@@ -13,7 +13,7 @@ class Vacancy:
         self.vacancy_url = self.vacancy['alternate_url']
         self.vacancy_description = self.vacancy['snippet']
         self.vacancy_salary = self.vacancy['salary_to_be_sorted_by']
-        self.employer = self.vacancy['employer']['name']
+        self.employer = self.vacancy['employer']
         self.source = self.vacancy['source']
 
     def __gt__(self, other) -> bool:
@@ -29,7 +29,8 @@ class Vacancy:
         return self.vacancy['salary'] < other.vacancy['salary']
 
     def __str__(self):
-        return f'{self.vacancy_name}, зарплата: {self.vacancy_salary} руб/мес, Компания: {self.employer}, ссылка: {self.vacancy_url}'
+        return f'{self.source}, {self.vacancy_name}, зарплата: {self.vacancy_salary} руб/мес, ' \
+               f'Компания: {self.employer}, \nссылка для отклика: {self.vacancy_url}\n'
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.vacancy})"
@@ -42,15 +43,20 @@ class Vacancy:
 
 
 class CountMixin:
-    """Класс Mixin для подсчета вакансий ресурсов HH и SJ."""
+    """Класс Mixin для подсчета инициализированных вакансий ресурсов HH и SJ."""
 
-    # Счетчики выданных вакансий
+    # Счетчики собранных вакансий
     count_HH = 0
     count_SJ = 0
+    count_V = 0
 
     def __init__(self):
-        CountMixin.count_SJ += 1
-        CountMixin.count_HH += 1
+        if self.__class__.__name__ == 'HHVacancy':
+            CountMixin.count_HH += 1
+        elif self.__class__.__name__ == 'SJVacancy':
+            CountMixin.count_SJ += 1
+        else:
+            CountMixin.count_V += 1
 
     @property
     def get_count_of_vacancy(self):

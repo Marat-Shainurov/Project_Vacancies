@@ -1,5 +1,6 @@
 import json
 
+from src.classes import HH, SuperJob
 from src.jobs_classes import HHVacancy, SJVacancy
 
 
@@ -86,3 +87,54 @@ def write_to_file_final(top_to_apply, path_to_file):
         else:
             obj_sj = SJVacancy(vacancy)
             obj_sj.write_to_file(path_to_file)
+
+
+def get_started():
+    """
+    Проводит интерактив с пользователем, получая текст запроса и ожидаемый опыт работы.
+    Возвращает 2 экземпляра классов HH и SuperJob.
+    """
+
+    with open('../src/response_data.json', 'w') as f:
+        f.write("")
+    with open('../src/vacancies_to_apply.txt', 'w') as f:
+        f.write("")
+
+    print("\nПривет!\nВведите текст по которому будет производится поиск на сайтах HH и SuperJob.")
+    user_key_text = input("Ваш текст: ").strip()
+
+    print("\nВыберете уровень ожидаемого опыта работы от кандидата на SuperJob. "
+          "\nРекомендация выбирать либо от '2', либо выбирать не только '1' "
+          "\n(иначе почти весь ответ будет одна и та же вакансия Яндекс во всех городах страны :) \n")
+    print("'1' - опыт не требуется\n'2' - от 1 до 3 лет\n'3' - от 3 до  6 лет\n'4' - более 6 лет\n")
+    print("Можно ввести несколько значений через пробел, для включения нескольких групп.\n")
+
+    user_experience_sj = input("Введите опыт: ").strip()
+    while not set(user_experience_sj.split(' ')).issubset({'1', '2', '3', '4'}):
+        user_experience_sj = input("Введите опыт корректно: ").strip()
+
+    user_experience_sj_fin = tuple(int(x) for x in user_experience_sj.split(' '))
+
+    print("\nВыберете уровень ожидаемого опыта работы от кандидата на HH по той же шкале. ")
+    user_experience_hh = input("Введите опыт: ").strip()
+    while not set(user_experience_hh.split(' ')).issubset({'1', '2', '3', '4'}):
+        user_experience_hh = input("Введите опыт корректно: ").strip()
+
+    user_experience_hh = tuple(x for x in user_experience_hh.split(' '))
+    user_experience_hh_fin = []
+
+    for el in user_experience_hh:
+        if el == '1':
+            user_experience_hh_fin.append('noExperience')
+        elif el == '2':
+            user_experience_hh_fin.append('between1And3')
+        elif el == '3':
+            user_experience_hh_fin.append('between3And6')
+        else:
+            user_experience_hh_fin.append('moreThan6')
+
+    object_HH = HH(key_text=user_key_text, experience=tuple(user_experience_hh_fin))
+    object_SJ = SuperJob(key_text=user_key_text, experience=user_experience_sj_fin)
+    print("Спасибо, ожидайте загрузку инфо.")
+
+    return object_HH, object_SJ

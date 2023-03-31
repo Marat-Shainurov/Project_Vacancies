@@ -15,9 +15,9 @@ def test_get_top():
 
 def test_write_to_file():
     data_to_write = get_top(f"../tests/test_response_data.json", 2)
-    write_to_file_final(data_to_write, f"../tests/test_vacancies.txt")
-    with open(f"../tests/test_vacancies.txt", encoding='utf8') as f:
+    write_to_file_final(data_to_write, f"../tests/test_vacancies_to_apply.txt.")
+    with open(f"../tests/test_vacancies_to_apply.txt.", encoding='utf8') as f:
         content = f.read()
     assert content[0] == "\n"
-    with open(f"../tests/test_vacancies.txt", 'w', encoding='utf8') as f:
+    with open(f"../tests/test_vacancies_to_apply.txt.", 'w', encoding='utf8') as f:
         f.write('')

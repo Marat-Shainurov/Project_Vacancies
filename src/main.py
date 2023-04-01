@@ -1,5 +1,6 @@
 from src.jobs_classes import CountMixin
 from src.utils import get_top, write_to_file_final, get_started
+import time
 
 # Интерактив с пользователем, создание объектов классов HH SuperJob.
 objects = get_started()
@@ -16,6 +17,7 @@ top_to_apply = get_top('response_data.json', top_count)
 write_to_file_final(top_to_apply, f'../src/vacancies_to_apply.txt')
 
 # Завершение программы
-print(CountMixin().get_count_of_vacancy)
 print()
-print("Вакансии для потенциальных откликов записаны в файл 'vacancies_to_apply.txt'.\nУдачи на интервью! :)")
+print("Вакансии для потенциальных откликов записаны в файл 'vacancies_to_apply.txt'.")
+print(CountMixin().get_count_of_vacancy)
+print("Удачи на интервью! :)")

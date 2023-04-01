@@ -1,6 +1,5 @@
 from src.jobs_classes import CountMixin
 from src.utils import get_top, write_to_file_final, get_started
-import time
 
 # Интерактив с пользователем, создание объектов классов HH SuperJob.
 objects = get_started()

@@ -1,4 +1,4 @@
-from src.utils import sorting, get_top, write_to_file_final
+from src.utils import sorting, get_top, write_to_file_final, get_experience_from_user_input_hh
 
 
 def test_sorting():
@@ -31,3 +31,6 @@ def test_write_to_file():
     assert content[0] == "\n"
     with open(testing_file_path, 'w', encoding='utf8') as f:
         f.write('')
+
+def test_getting_experience():
+    assert get_experience_from_user_input_hh(('1', '2', '3')) == ('noExperience', 'between1And3', 'between3And6')

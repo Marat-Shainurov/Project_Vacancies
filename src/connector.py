@@ -14,7 +14,7 @@ class Connector:
         При инициализации, как и при присвоении нового значения data_file,
         проходить проверка на существование и корректность файла, создание нового файла при необходимости.
         """
-        self.path_to_file = f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{data_file}"
+        self.path_to_file = f"../src/{data_file}"
 
         if not os.path.exists(self.path_to_file):
             f = open(self.path_to_file, 'w', encoding='utf8')
@@ -43,7 +43,7 @@ class Connector:
         Проверка на существование файла с данными и создание его при необходимости.
         Также проверить на деградацию и возбудить исключение если файл потерял актуальность в структуре данных.
         """
-        self.path_to_file = f"C:\\Users\\m_sha\\PycharmProjects\\Project_Vacancies\\src\\{value}"
+        self.path_to_file = f"../src/{value}"
 
         if not os.path.exists(self.path_to_file):
             f = open(self.path_to_file, 'w', encoding='utf8')

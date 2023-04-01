@@ -33,4 +33,7 @@ def test_write_to_file():
         f.write('')
 
 def test_getting_experience():
+    """
+    Тестирует вспомогательную функцию для конвертации опыта в необходимый формат.
+    """
     assert get_experience_from_user_input_hh(('1', '2', '3')) == ('noExperience', 'between1And3', 'between3And6')
